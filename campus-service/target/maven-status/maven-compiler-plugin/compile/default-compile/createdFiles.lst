@@ -1,0 +1,13 @@
+com\campus\service\TeachPlanService.class
+com\campus\service\GradeService.class
+com\campus\service\OpinionService.class
+com\campus\service\BannerService.class
+com\campus\service\LoginLogService.class
+com\campus\service\UserService.class
+com\campus\service\CourseService.class
+com\campus\service\AbstractService.class
+com\campus\service\NewsService.class
+com\campus\service\TrainClassService.class
+com\campus\service\TrainerService.class
+com\campus\service\FootballKnowService.class
+com\campus\service\CertificateService.class

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.TeachPlanMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.TeachPlan" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+    <result column="download" property="download" jdbcType="INTEGER" />
+    <result column="collection" property="collection" jdbcType="BIGINT" />
+    <result column="views" property="views" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, url, grade_id, download, collection, views,type,level
+  </sql>
+  <select id="findTeachPlanById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from teach_plan
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteTeachPlanById" parameterType="java.lang.Integer" >
+    delete from teach_plan
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertTeachPlan" parameterType="com.campus.dao.pojo.TeachPlan" >
+    insert into teach_plan (id, title, url, 
+      grade_id, download, collection, 
+      views,type,level)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{gradeId,jdbcType=INTEGER}, #{download,jdbcType=INTEGER}, #{collection,jdbcType=BIGINT}, 
+      #{views,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{level,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertTeachPlanSelective" parameterType="com.campus.dao.pojo.TeachPlan" >
+    insert into teach_plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="gradeId != null" >
+        grade_id,
+      </if>
+      <if test="download != null" >
+        download,
+      </if>
+      <if test="collection != null" >
+        collection,
+      </if>
+      <if test="views != null" >
+        views,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="download != null" >
+        #{download,jdbcType=INTEGER},
+      </if>
+      <if test="collection != null" >
+        #{collection,jdbcType=BIGINT},
+      </if>
+      <if test="views != null" >
+        #{views,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateTeachPlanByIdSelective" parameterType="com.campus.dao.pojo.TeachPlan" >
+    update teach_plan
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeId != null" >
+        grade_id = #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="download != null" >
+        download = #{download,jdbcType=INTEGER},
+      </if>
+      <if test="collection != null" >
+        collection = #{collection,jdbcType=BIGINT},
+      </if>
+      <if test="views != null" >
+        views = #{views,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=TINYINT}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateTeachPlanById" parameterType="com.campus.dao.pojo.TeachPlan" >
+    update teach_plan
+    set title = #{title,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      grade_id = #{gradeId,jdbcType=INTEGER},
+      download = #{download,jdbcType=INTEGER},
+      collection = #{collection,jdbcType=BIGINT},
+      views = #{views,jdbcType=BIGINT},
+      type = #{type,jdbcType=TINYINT},
+      level = #{level,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findTeachPlanList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from teach_plan
+    <where>
+      1=1
+      <if test="type != null">
+        and type = #{type,jdbcType=TINYINT}
+      </if>
+      <if test="gradeId != null">
+        and grade_id = #{gradeId,jdbcType=INTEGER}
+      </if>
+      <if test="keyword != null and keyword.length() > 0">
+        and title like CONCAT(CONCAT('%', #{keyword,jdbcType=VARCHAR}), '%')
+      </if>
+    </where>
+  </select>
+</mapper>

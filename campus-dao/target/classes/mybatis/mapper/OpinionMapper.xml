@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybais.mapper.OpinionMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.Opinion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pubdate" property="pubdate" jdbcType="BIGINT" />
+    <result column="trainer_id" property="trainerId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.campus.dao.pojo.Opinion" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, pubdate, trainer_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectOpinionByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from opinion
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteOpinionByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from opinion
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+ <!-- <insert id="insertOpinion" parameterType="com.campus.dao.pojo.Opinion" >
+    insert into opinion (id, pubdate, trainer_id, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{pubdate,jdbcType=BIGINT}, #{trainerId,jdbcType=INTEGER}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>-->
+
+  <!--添加反馈消息-->
+  <insert id="insertOpinion"
+          useGeneratedKeys="true"  keyProperty="id"
+          parameterType="java.util.Map" >
+    insert into opinion (pubdate, trainer_id,
+    content)
+    values (#{pubdate,jdbcType=BIGINT}, #{trainerId,jdbcType=INTEGER},
+    #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.campus.dao.pojo.Opinion" >
+    insert into opinion
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pubdate != null" >
+        pubdate,
+      </if>
+      <if test="trainerId != null" >
+        trainer_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pubdate != null" >
+        #{pubdate,jdbcType=BIGINT},
+      </if>
+      <if test="trainerId != null" >
+        #{trainerId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.campus.dao.pojo.Opinion" >
+    update opinion
+    <set >
+      <if test="pubdate != null" >
+        pubdate = #{pubdate,jdbcType=BIGINT},
+      </if>
+      <if test="trainerId != null" >
+        trainer_id = #{trainerId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.campus.dao.pojo.Opinion" >
+    update opinion
+    set pubdate = #{pubdate,jdbcType=BIGINT},
+      trainer_id = #{trainerId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findOpinionList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+    select
+    p.id, p.pubdate, p.trainer_id,p.content
+    from opinion p,trainer t
+    <where>
+      t.id = p.trainer_id
+      <if test="keyword != null and keyword.length()>0">
+        and (t.name like CONCAT(CONCAT('%', #{keyword}), '%') or t.phone like CONCAT(CONCAT('%', #{keyword}), '%'))
+      </if>
+      <if test="startTime != null and endTime != null">
+        and p.pubdate <![CDATA[ >= ]]> ${startTime} and p.pubdate <![CDATA[ < ]]> ${endTime}
+      </if>
+    </where>
+    order by p.pubdate DESC
+  </select>
+</mapper>

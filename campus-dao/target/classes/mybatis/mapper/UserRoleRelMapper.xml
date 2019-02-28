@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.UserRoleRelMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.UserRoleRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, role_id
+  </sql>
+  <select id="findUserRoleRelById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_role_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteUserRoleRelById" parameterType="java.lang.Integer" >
+    delete from user_role_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertUrr" parameterType="com.campus.dao.pojo.UserRoleRel" >
+    insert into user_role_rel (id, user_id, role_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertUrrSelective" parameterType="com.campus.dao.pojo.UserRoleRel" >
+    insert into user_role_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateUserRoleRelByIdSelective" parameterType="com.campus.dao.pojo.UserRoleRel" >
+    update user_role_rel
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateUserRoleRelById" parameterType="com.campus.dao.pojo.UserRoleRel" >
+    update user_role_rel
+    set user_id = #{userId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findUserRoleRelByUserIdAndRoleId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from user_role_rel
+    where user_id = #{userId,jdbcType=INTEGER} AND role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteUserRoleRelByUserId" parameterType="java.lang.Integer" >
+    delete from user_role_rel
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <select id="findRolesByUserId" resultType="Integer" parameterType="java.lang.Integer" >
+    select
+    r.role_type
+    from user_role_rel urr,role r
+    where urr.user_id = #{userId,jdbcType=INTEGER} AND urr.role_id = r.id
+  </select>
+  <delete id="deleteUserRoleRelByUserIdAndRoleList" parameterType="java.util.Map" >
+    delete from user_role_rel
+    where user_id = #{userId,jdbcType=INTEGER} and role_id NOT IN
+    <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+       #{roleId}
+    </foreach>
+  </delete>
+</mapper>

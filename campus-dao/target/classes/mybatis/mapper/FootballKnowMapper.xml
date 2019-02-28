@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.FootballKnowMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.FootballKnow" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="imgs" property="imgs" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="collection" property="collection" jdbcType="BIGINT" />
+    <result column="views" property="views" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.campus.dao.pojo.FootballKnow" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, imgs, type, collection, views
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="findFootballKnowById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from football_know
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteFootBallKnowById" parameterType="java.lang.Integer" >
+    delete from football_know
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertFootballKnow" parameterType="com.campus.dao.pojo.FootballKnow" >
+    insert into football_know (id, title, imgs, 
+      type, collection, views, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{imgs,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{collection,jdbcType=BIGINT}, #{views,jdbcType=BIGINT}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertFootballKnowSelective" parameterType="com.campus.dao.pojo.FootballKnow" >
+    insert into football_know
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="imgs != null" >
+        imgs,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="collection != null" >
+        collection,
+      </if>
+      <if test="views != null" >
+        views,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="imgs != null" >
+        #{imgs,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="collection != null" >
+        #{collection,jdbcType=BIGINT},
+      </if>
+      <if test="views != null" >
+        #{views,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateFootballKnowByIdSelective" parameterType="com.campus.dao.pojo.FootballKnow" >
+    update football_know
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="imgs != null" >
+        imgs = #{imgs,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="collection != null" >
+        collection = #{collection,jdbcType=BIGINT},
+      </if>
+      <if test="views != null" >
+        views = #{views,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateFootballKnowById" parameterType="com.campus.dao.pojo.FootballKnow" >
+    update football_know
+    set title = #{title,jdbcType=VARCHAR},
+      imgs = #{imgs,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      collection = #{collection,jdbcType=BIGINT},
+      views = #{views,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findFootballKnowList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from football_know
+    <where>
+      1=1
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="title != null and title.length()>0">
+        and title like CONCAT(CONCAT('%', #{title}), '%')
+      </if>
+
+    </where>
+  </select>
+</mapper>
