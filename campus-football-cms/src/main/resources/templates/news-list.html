@@ -1,0 +1,190 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<style type="text/css">
+		.icon {
+			width: 1.2em; height: 1.2em;
+			vertical-align: -0.15em;
+			fill: currentColor;
+			overflow: hidden;
+		}
+	</style>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+	<script type="text/javascript" src="/static/lib/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="/static/lib/Hui-iconfont/1.0.9/iconfont.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.9/demo.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+	<!--[if IE 6]>
+	<script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+	<title>新闻资讯</title>
+</head>
+<body>
+<nav class="breadcrumb"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-home"></use></svg> 首页 <span class="c-gray en">&gt;</span> 新闻相关<span class="c-gray en">&gt;</span> 新闻资讯 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-huanyipi"></use></svg></a></nav>
+<div class="page-container">
+	<div class="text-c">
+		<input type="text" class="input-text" maxlength="20" style="width:200px" placeholder="关键词搜索" id="keyword" name=""/>
+		<button type="submit" value="搜索" class="btn btn-success radius" onclick="searchPage()"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-search1"></use></svg> 搜索</button>
+		<button type="reset" value="重置" class="btn btn-success radius" onclick="formReset()"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-xiangpicha"></use></svg> 重置</button>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a href="javascript:;" onclick="member_add('添加新闻','/newsAdd','1000','810')" class="btn btn-primary radius"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-add"></use></svg> 添加新闻</a></span><span class="r" >共有数据：<strong id="totalnum">0</strong> 条</span> </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<thead>
+			<tr class="text-c">
+				<th width="150">标题</th>
+				<th width="70">添加时间</th>
+				<th width="70">
+					<select class="select" id="newsType" style="width:100px">
+						<option value=''>所有新闻</option>
+						<option value='1'>教育新闻</option>
+						<option value='2'>培训新闻</option>
+					</select>
+				</th>
+				<th width="50">收藏数</th>
+				<th width="50">浏览数</th>
+				<th width="100">操作</th>
+			</tr>
+			</thead>
+			<tbody id="trdata">
+			</tbody>
+		</table>
+	</div>
+	<div id="jpager"></div><!-- 渲染 -->
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/lib/laypage/1.2/laypage.js"></script>
+<!-- 引入kkpager -->
+<script type="text/javascript" src="/static/kkpager/jpager.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/kkpager/jpager.css"/>
+<script type="text/javascript" src="/static/commonjs/listpage.js"></script>
+<script type="text/javascript">
+	/*用户-添加*/
+    function member_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+
+	/*用户-编辑*/
+    function member_edit(title,url,id,w,h){
+        var url = url+"?newsId="+id;
+        layer_show(title,url,w,h);
+    }
+
+    $("#newsType").change(function(){
+        searchPage();
+    });
+
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            var newsId = id;
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/news/deleteNews',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    id:newsId
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    function formReset(){
+        $('#keyword').val("");
+        searchPage();
+    }
+
+    //回车响应搜索
+    document.onkeydown=function(event){
+        e = event ? event :(window.event ? window.event : null);
+        if(e.keyCode==13){
+            searchPage();
+        }
+    }
+
+    $(function() {
+        searchPage();//分页查询
+    });
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D;
+    }
+
+    function searchPage(page){
+        var url = "/manageApi/news/getNewsList";
+        var keyword = $('#keyword').val();
+        var newsType = $('#newsType').val();
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify({
+                keyword:keyword,
+                type:newsType,
+                page:page
+            }),
+            dataType: "json",
+            success: function (data) {
+                arrayPage(data.result.pages,data.result.size,page);
+                $('#trdata').empty();
+                var userList = data.result.list;
+                if(userList.length < 1){
+                    layer.msg('暂无记录!',{icon:6,time:1000});
+                }
+                for(var i in userList){
+                     var newsId =userList[i].id;
+                     var time = timestampToTime(userList[i].createTime);
+                     var _div = "<tr class='text-c'><td>" + userList[i].title
+                        + "</td><td>" + time
+                        + "</td><td>" + userList[i].typeStr
+                        + "</td><td>" + userList[i].collection
+                        + "</td><td>" + userList[i].views
+                        + "</td><td class=\"td-manage\"><i class=\"Hui-iconfont\"> <a title=\"编辑\" href=\"javascript:;\" onclick=\"member_edit('编辑','/newsAdd',"+newsId+",'1000','810')\" class=\"ml-5\" style=\"text-decoration:none\"><svg class=\"Hui-iconfont icon\" aria-hidden=\"true\"><use xlink:href=\"#Hui-iconfont-edit\"></use></svg></a><a title=\"删除\" href=\"javascript:;\" onclick=\"member_del(this,"+newsId+")\" class=\"ml-5\" style=\"text-decoration:none\"><svg class=\"Hui-iconfont icon\" aria-hidden=\"true\"><use xlink:href=\"#Hui-iconfont-del2\"></use></svg></a></td></tr>";
+                    $('#trdata').append(_div);
+                }
+                $('#totalnum').html(data.result.total);
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+</script>
+</body>
+</html>

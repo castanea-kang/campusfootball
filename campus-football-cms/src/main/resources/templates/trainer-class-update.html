@@ -1,0 +1,376 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="favicon.ico" />
+<link rel="Shortcut Icon" href="favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+<script type="text/javascript" src="/static/lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>编辑培训班级</title>
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-member-add">
+		<div id="main" style="margin-left:20px;width:960px;height:500px;">
+			<div id="left" style="width: 460px;height: 500px;float:left;display: inline">
+				&nbsp;班级信息：
+				<div class="row cl">
+					<span class="c-red">*</span>培训名称：<input type="text" class="input-text" value="" style="width:360px" placeholder="" id="trainName" name="trainName" placeholder="请填写培训名称"/>
+				</div>
+				<div class="row cl">
+					<span class="c-red">*</span>培训时间：
+					<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="datemin" class="input-text Wdate" style="width:170px;" placeholder="培训开始时间">
+					-
+					<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" class="input-text Wdate" style="width:170px;" placeholder="培训结束时间">
+				</div>
+				<div class="row cl">
+					&nbsp;培训人数：<input type="number" class="input-text" value="" style="width:360px" placeholder="班级人数" id="classNum" name="classNum"/>
+				</div>
+				<div class="row cl">
+					<span class="c-red">*</span>班&nbsp;主&nbsp;任&nbsp;：<input type="text" class="input-text" value="" style="width:360px" placeholder="请填写班主任姓名" id="masterName" name="masterName"/>
+				</div>
+				<div class="row cl">
+					&nbsp;班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长：
+					<select class="select" id="trainerId" style="width:360px;height: 30px">
+					</select>
+				</div>
+				<div class="row cl">
+					&nbsp;培训状态：
+					<select class="select" id="status" style="width:360px;height: 30px">
+						<option value="" onclick="">培训状态</option>
+						<option value="1">报名中</option>
+						<option value="2" >培训中</option>
+						<option value="3">培训结束</option>
+					</select>
+				</div>
+				<div class="row cl">
+					&nbsp;考试时间：<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="examdate" class="input-text Wdate" placeholder="请填考试时间" style="width:360px;">
+				</div>
+				<div class="row cl">
+					<label>&nbsp;培训介绍：</label>
+					<div style="margin-left:70px">
+						<textarea id="intro" name="intro" cols="" rows="" class="textarea" style="width:360px" placeholder="请填写培训班的相关信息" onKeyUp="$.Huitextarealength(this,100)"></textarea>
+					</div>
+				</div>
+			</div>
+			<div id="right" style="margin-left:20px;width: 460px;height:500px;float:right;display: inline">
+				&nbsp;培训课程：
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data1" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content1" name="content1" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data2" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content2" name="content2" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data3" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content3" name="content3" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data4" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content4" name="content4" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data5" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content5" name="content5" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data6" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content6" name="content6" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<div style="height: 40px;float:left;display: inline">
+						<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d\'}'})" id="data7" class="input-text Wdate" placeholder="时间" style="width:100px;height: 40px">
+					</div>
+					<div style="margin-left:5px;display: inline">
+						<textarea id="content7" name="content7" cols="" rows="" class="textarea"  placeholder=内容" style="width:320px;height: 40px;"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" onclick="" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
+				<button onClick="layer_close();" style="margin-left: 20px" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+    getTrainerList();
+    getTrainClass();
+    getClassCourse();
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$("#form-member-add").validate({
+		rules:{
+			trainName:{
+				required:true
+			},
+			masterName:{
+				required:true
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+            updateTrainClass();
+//			$(form).ajaxSubmit();
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.$('.btn-refresh').click();
+			parent.layer.close(index);
+		}
+	});
+});
+
+function getQueryString(name) {
+    var result = window.location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    if (result == null || result.length < 1) {
+        return "";
+    }
+    return result[1];
+}
+
+function getCourseList(){
+    var courseList = new Array();
+    for (var i = 1;i <= 7; i++){
+        var itemJson = {};
+        var cdata = $('#data'+i).val();
+        var content = $('#content'+i).val();
+        if(cdata !== null && cdata !== undefined && cdata!==""&&content !== null&&content !== undefined){
+            var cdate = new Date(cdata);
+            itemJson.cdate = cdate.getTime();
+            itemJson.content = content;
+            courseList.push(JSON.stringify(itemJson));
+		}
+    }
+    return courseList;
+}
+
+function updateTrainClass(){
+    var url = "/manageApi/trainClass/editTrainClass";
+    var classId = getQueryString("classId");
+    var trainName = $('#trainName').val();
+    var startTime = $('#datemin').val();
+    var endTime = $('#datemax').val();
+    var classNum = $('#classNum').val();
+    var trainerId = $('#trainerId').val();
+    var masterName = $('#masterName').val();
+    var examdate = $('#examdate').val();
+    var status = $('#status').val();
+    var intro = $('#intro').val();
+    var sdate = new Date(startTime);
+    var edate = new Date(endTime);
+    var exd = new Date(examdate);
+    var courseList = null;
+    var ret =getCourseList();
+    if(ret!=null&&ret.length>0){
+        courseList = ret;
+	}
+    console.log(courseList);
+    startTime = sdate.getTime();
+    endTime = edate.getTime();
+    examdate = exd.getTime();
+    $.ajax({
+        type: "post",
+        url: url,
+        contentType: "application/json",
+        async:false,
+        data: JSON.stringify({
+			classId:classId,
+            name:trainName,
+            startTime:startTime,
+            endTime:endTime,
+            pNum:classNum,
+            trainerId:trainerId,
+            masterName:masterName,
+            examTime:examdate,
+            introduction:intro,
+            status:status,
+            courseList:courseList
+        }),
+        dataType: "json",
+        success: function (data) {
+            var ret = data.success;
+            if(ret){
+                alert(data.result);
+                parent.window.location.reload();
+            }else{
+                layer.msg(data.result,{icon:1,time:3000});
+			}
+        },
+        error: function(data) {
+            console.log(data);
+            layer.msg('异常!',{icon:1,time:3000});
+        }
+    })
+}
+function timestampToTime(timestamp) {
+    var date = new Date(timestamp);
+    Y = date.getFullYear() + '-';
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    D = date.getDate();
+    h = date.getHours() + ':';
+    m = date.getMinutes() + ':';
+    s = date.getSeconds();
+    return Y+M+D;
+}
+
+function getTrainClass(){
+    var url = "/manageApi/trainClass/getTrainClass";
+    var classId = getQueryString("classId");
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        async:false,
+        url: url,
+        data: JSON.stringify({
+            classId:classId
+        }),
+        dataType: "json",
+        success: function (data) {
+            $('#trainName').val(data.result.name);
+            var starttime = timestampToTime(data.result.startTime);
+            $('#datemin').val(starttime);
+            var endtime = timestampToTime(data.result.endTime);
+            $('#datemax').val(endtime);
+            $('#classNum').val(data.result.pNum);
+            $('#masterName').val(data.result.masterName);
+            if(data.result.examTime !== null && data.result.examTime !== undefined){
+                var examtime = timestampToTime(data.result.examTime);
+                $('#examdate').val(examtime);
+			}
+            $('#trainerId').val(data.result.trainerId);
+            $('#intro').val(data.result.introduction);
+            var status = data.result.status;
+            if(status < 1){
+                status = "";
+			}
+            $('#status').val(status);
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    });
+}
+function getTrainerList(){
+    var url = "/manageApi/trainer/getClassTrainerList";
+    var classId = getQueryString("classId");
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        async:false,
+        url: url,
+        data: JSON.stringify({
+            trainClassId:classId
+        }),
+        dataType: "json",
+        success: function (data) {
+            var tList = data.result;
+            $('#trainerId').append("<option value='' onclick=''>请选择班长</option>");
+            for (var j in tList){
+                var trainerId= tList[j].id;
+                var trainerName = tList[j].name;
+                $('#trainerId').append("<option value='"+trainerId+"'>" + trainerName + "</option>");
+            }
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    });
+}
+
+function getClassCourse(){
+    var url = "/manageApi/trainClass/getClassCourseList";
+    var classId = getQueryString("classId");
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        async:false,
+        url: url,
+        data: JSON.stringify({
+            trainClassId:classId
+        }),
+        dataType: "json",
+        success: function (data) {
+            var tList = data.result;
+            for (var j=1 ;j<=tList.length;j++){
+                var ctime = timestampToTime(tList[j-1].time);
+                var content = tList[j-1].content;
+                $('#data'+j).val(ctime);
+                $('#content'+j).val(content);
+            }
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    });
+}
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

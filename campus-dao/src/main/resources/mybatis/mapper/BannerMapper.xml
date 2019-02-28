@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.BannerMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.Banner" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="BIGINT" />
+    <result column="end_time" property="endTime" jdbcType="BIGINT" />
+    <result column="news_link" property="newsLink" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="TINYINT" />
+    <result column="news_id" property="newsId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, img, start_time, end_time, news_link,is_show,news_id
+  </sql>
+  <select id="findBannerById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from banner
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteBannerById" parameterType="java.lang.Integer" >
+    delete from banner
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertBanner" parameterType="com.campus.dao.pojo.Banner" >
+    insert into banner (id, img, start_time, 
+      end_time, news_link,news_id)
+    values (#{id,jdbcType=INTEGER}, #{img,jdbcType=VARCHAR}, #{startTime,jdbcType=BIGINT}, 
+      #{endTime,jdbcType=BIGINT}, #{newsLink,jdbcType=VARCHAR},#{news_id,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertBannerSelective" parameterType="com.campus.dao.pojo.Banner" >
+    insert into banner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="newsLink != null" >
+        news_link,
+      </if>
+      <if test="newsId != null" >
+        news_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="newsLink != null" >
+        #{newsLink,jdbcType=VARCHAR},
+      </if>
+      <if test="newsId != null" >
+        #{newsId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateBannerByIdSelective" parameterType="com.campus.dao.pojo.Banner" >
+    update banner
+    <set >
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="newsLink != null" >
+        news_link = #{newsLink,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="newsId != null" >
+        news_id = #{newsId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBannerById" parameterType="com.campus.dao.pojo.Banner" >
+    update banner
+    set img = #{img,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=BIGINT},
+      end_time = #{endTime,jdbcType=BIGINT},
+      news_link = #{newsLink,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=TINYINT},
+      news_id = #{newsId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="Base2_Column_List" >
+    b.id, b.img, b.start_time, b.end_time, b.news_link,b.is_show,b.news_id
+  </sql>
+  <select id="findBannerList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base2_Column_List" />
+    from banner b,news n
+    <where>
+      1=1
+      <if test="newsType != null || startTime != null">
+        and b.news_id = n.id
+      </if>
+      <if test="startTime != null">
+        and n.create_time <![CDATA[ >= ]]> #{startTime,jdbcType=BIGINT}
+        and n.create_time <![CDATA[ < ]]> #{endTime,jdbcType=BIGINT}
+      </if>
+      <if test="newsType != null">
+        and n.type = #{newsType,jdbcType=TINYINT}
+      </if>
+    </where>
+    group by b.id
+  </select>
+  <select id="findBannerByNewsId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from banner
+    where news_id= #{newsId,jdbcType=INTEGER}
+  </select>
+</mapper>

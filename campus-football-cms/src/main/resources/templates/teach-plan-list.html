@@ -1,0 +1,291 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<style type="text/css">
+		.icon {
+			width: 1.2em; height: 1.2em;
+			vertical-align: -0.15em;
+			fill: currentColor;
+			overflow: hidden;
+		}
+	</style>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+	<script type="text/javascript" src="/static/lib/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="/static/lib/Hui-iconfont/1.0.9/iconfont.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.9/demo.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+	<!--[if IE 6]>
+	<script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+	<title>学习教案</title>
+</head>
+<body>
+<nav class="breadcrumb"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-home"></use></svg> 首页 <span class="c-gray en">&gt;</span> 学习教案<span class="c-gray en">&gt;</span> <strong id="ide">方案</strong> <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-huanyipi"></use></svg></a></nav>
+<div class="page-container">
+	<div class="text-c">
+		<select class="select" id="gradeId" style="width:150px;height: 30px">
+			<option value=''>所教年级</option>
+		</select>
+		<input type="text" class="input-text" maxlength="20" style="margin-left:20px;width:200px" placeholder="关键词搜索" id="keyword" name=""/>
+		<button type="submit" value="搜索" class="btn btn-success radius" onclick="searchPage()"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-search1"></use></svg> 搜索</button>
+		<button type="reset" value="重置" class="btn btn-success radius" onclick="formReset()"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-xiangpicha"></use></svg> 重置</button>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-del2"></use></svg> 批量删除</a><a href="javascript:;" onclick="member_add('批量添加','/teachPlanAdd','','310')" class="btn btn-primary radius"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-add"></use></svg> 批量添加</a></span><span class="l" >共有数据：<strong id="totalnum">0</strong> 条</span> </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<thead>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="playerAll" id="playerAll" value=""></th>
+				<th width="150">标题</th>
+				<th width="70">适用年级</th>
+				<th width="50">下载数</th>
+				<th width="50">收藏数</th>
+				<th width="50">浏览数</th>
+				<th width="100">操作</th>
+			</tr>
+			</thead>
+			<tbody id="trdata">
+			</tbody>
+		</table>
+	</div>
+	<div id="jpager"></div><!-- 渲染 -->
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/lib/laypage/1.2/laypage.js"></script>
+<!-- 引入kkpager -->
+<script type="text/javascript" src="/static/kkpager/jpager.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/kkpager/jpager.css"/>
+<script type="text/javascript" src="/static/commonjs/listpage.js"></script>
+<script type="text/javascript">
+	/*用户-添加*/
+    function member_add(title,url,w,h){
+        var type = getQueryString("type");
+        var url = url+"?type="+type;
+        layer_show(title,url,w,h);
+    }
+
+	/*用户-编辑*/
+    function member_edit(title,url,id,w,h){
+        layer_show(title,url,w,h);
+    }
+
+    $("#newsType").change(function(){
+        searchPage();
+    });
+	/*删除*/
+    function file_download(id,dnum,url){
+        url = url+"&attname=";
+        window.location.href = url;
+        if(id !== null && dnum !== null && dnum !== undefined){
+            dnum = parseInt(dnum)+1;
+            editTeachPlan(id,dnum);
+		}
+    }
+
+    function formReset(){
+        $('#gradeId').val("");
+        $('#keyword').val("");
+        searchPage();
+    }
+
+    //回车响应搜索
+    document.onkeydown=function(event){
+        e = event ? event :(window.event ? window.event : null);
+        if(e.keyCode==13){
+            searchPage();
+        }
+    }
+
+	/*删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            var ids = id.toString().split("|");
+            var list = new Array();
+            if(ids != null && ids.length>0){
+                for(var i=0;i<ids.length;i++){
+                    list.push(parseInt(ids[i]));
+                }
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/teachPlan/deleteTeachPlan',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    planIds:list
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    //批量删除
+    function datadel(){
+        layer.confirm('确认要删除吗？',function(index){
+            var checks = $("input[name='playeritem']:checked");
+            if(checks.length == 0){ alert('未选中任何项！');return false;}
+            var checked = new Array();
+            checks.each(function(){
+                checked.push($(this).val());
+            });
+            var list = new Array();
+            if(checked != null && checked.length>0){
+                for(var i=0;i<checked.length;i++){
+                    list.push(parseInt(checked[i]));
+                }
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/teachPlan/deleteTeachPlan',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    planIds:list
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+//                    $(obj).parents("tr").remove();
+                        window.location.reload();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+    function getQueryString(name) {
+        var result = window.location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+    $(function() {
+        var type = getQueryString("type");
+        if(type == 0){
+            $('#ide').html("方案");
+		}
+        if(type == 1){
+            $('#ide').html("游戏方案");
+        }
+        if(type == 2){
+            $('#ide').html("视频教学");
+        }
+        getGradeList();
+        searchPage();//分页查询
+        $("#playerAll").bind("click",function(){
+            $("input[name='playeritem']").prop("checked",this.checked);
+        });
+    });
+    function searchPage(){
+        var url = "/manageApi/teachPlan/getTeachPlanList";
+        var keyword = $('#keyword').val();
+        var gradeId = $('#gradeId').val();
+        var type = getQueryString("type");
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify({
+                keyword:keyword,
+                gradeId:gradeId,
+                type:type
+            }),
+            dataType: "json",
+            success: function (data) {
+                $('#trdata').empty();
+                var userList = data.result;
+                if(userList.length < 1){
+                    layer.msg('暂无记录!',{icon:6,time:1000});
+                }
+                for(var i in userList){
+                     var planId =userList[i].id;
+                     var fileUrl = userList[i].url;
+                    var down = userList[i].download
+                     var _div = "<tr class='text-c'><td><input type='checkbox' name='playeritem' id='playeritem"+i+"' value='"+planId+"'/></td><td>" + userList[i].title
+                        + "</td><td>" + userList[i].gradeStr
+                        + "</td><td>" + userList[i].download
+                        + "</td><td>" + userList[i].collection
+                        + "</td><td>" + userList[i].views
+                        + "</td><td class=\"td-manage\"><i class=\"Hui-iconfont\"> <a title=\"下载\" href=\"javascript:;\" onclick=\"file_download("+planId+","+down+",'"+fileUrl+"')\" class=\"ml-5\" style=\"text-decoration:none\"><svg class=\"Hui-iconfont icon\" aria-hidden=\"true\"><use xlink:href=\"#Hui-iconfont-down\"></use></svg></a><a title=\"删除\" href=\"javascript:;\" onclick=\"member_del(this,"+planId+")\" class=\"ml-5\" style=\"text-decoration:none\"><svg class=\"Hui-iconfont icon\" aria-hidden=\"true\"><use xlink:href=\"#Hui-iconfont-del2\"></use></svg></a></td></tr>";
+                    $('#trdata').append(_div);
+                }
+                $('#totalnum').html(userList.length);
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+    function getGradeList(){
+        var url = "/manageApi/getGradeList";
+        $.ajax({
+            type: "get",
+            async:false,
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                var gList = data.result;
+                console.log(gList);
+                for (var j in gList){
+                    var gradeId= gList[j].id;
+                    var gradeName = gList[j].name;
+                    $('#gradeId').append("<option value='"+gradeId+"'>" + gradeName + "</option>");
+                }
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+
+    function editTeachPlan(id,dnum){
+        var url = "/manageApi/teachPlan/editTeachPlan";
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            async:false,
+            data: JSON.stringify({
+                id:id,
+                download:dnum
+            }),
+            dataType: "json",
+            success: function (data) {
+            }
+        })
+    }
+</script>
+</body>
+</html>

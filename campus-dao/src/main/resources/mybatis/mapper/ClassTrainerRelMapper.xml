@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.ClassTrainerRelMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.ClassTrainerRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="trainer_id" property="trainerId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, class_id, trainer_id
+  </sql>
+  <select id="findClassTrainerRelById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from class_trainer_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteClassTrainerRelById" parameterType="java.lang.Integer" >
+    delete from class_trainer_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertCtr" parameterType="com.campus.dao.pojo.ClassTrainerRel" >
+    insert into class_trainer_rel (id, class_id, trainer_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{classId,jdbcType=INTEGER}, #{trainerId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertCtrSelective" parameterType="com.campus.dao.pojo.ClassTrainerRel" >
+    insert into class_trainer_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="classId != null" >
+        class_id,
+      </if>
+      <if test="trainerId != null" >
+        trainer_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="trainerId != null" >
+        #{trainerId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCtrByIdSelective" parameterType="com.campus.dao.pojo.ClassTrainerRel" >
+    update class_trainer_rel
+    <set >
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="trainerId != null" >
+        trainer_id = #{trainerId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateCtrById" parameterType="com.campus.dao.pojo.ClassTrainerRel" >
+    update class_trainer_rel
+    set class_id = #{classId,jdbcType=INTEGER},
+      trainer_id = #{trainerId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,317 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<style type="text/css">
+		.icon {
+			width: 1.2em; height: 1.2em;
+			vertical-align: -0.15em;
+			fill: currentColor;
+			overflow: hidden;
+		}
+	</style>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+	<script type="text/javascript" src="/static/lib/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="/static/lib/Hui-iconfont/1.0.9/iconfont.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.9/demo.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+	<!--[if IE 6]>
+	<script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+	<title>学员管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-home"></use></svg> 首页 <span class="c-gray en">&gt;</span> 培训师管理<span class="c-gray en">&gt;</span> 学员管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-huanyipi"></use></svg></a></nav>
+<div class="page-container">
+	<input hidden="hidden" class="input-text"  id="dataList" name="" value=""/>
+	<form action='/dataExport' method='post' name='formx1' id='formx1' style='display:none' onsubmit='return saveReport();'>
+		<input type="hidden" id="attr" name="attr" value="">
+		<input type="hidden" id="list" name="list" value="">
+	</form>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-primary radius"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-del2"></use></svg> 批量删除</a> <a href="javascript:;" onclick="member_add('添加学员','/classTrainerAdd','','310')" class="btn btn-primary radius"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-add"></use></svg> 添加学员</a><a id="exportAll" class="btn btn-primary radius" style="margin-left: 10px"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-down"></use></svg> 下载学员名单</a></span><span class="r" >共有数据：<strong id="totalnum">0</strong> 条</span> </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<thead>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="playerAll" id="playerAll" value=""></th>
+				<th width="50">序号</th>
+				<th width="70">真实姓名</th>
+				<th width="100">身份证号</th>
+				<th width="70">手机号</th>
+				<th width="70">
+					<select class="select" id="gradeId" style="width:100px">
+						<option value=''>所教年级</option>
+						<option value='1'>幼儿园</option>
+						<option value='2'>小学</option>
+						<option value='3'>初中</option>
+						<option value='4'>高中</option>
+					</select>
+				</th>
+				<th width="100">工作单位</th>
+				<!--<th width="50">注册状态</th>-->
+				<th width="100">操作</th>
+			</tr>
+			</thead>
+			<tbody id="trdata">
+			</tbody>
+		</table>
+	</div>
+	<div id="jpager"></div><!-- 渲染 -->
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/lib/laypage/1.2/laypage.js"></script>
+<!-- 引入kkpager -->
+<script type="text/javascript" src="/static/kkpager/jpager.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/kkpager/jpager.css"/>
+<script type="text/javascript" src="/static/commonjs/listpage.js"></script>
+<script type="text/javascript">
+	/*用户-添加*/
+    function member_add(title,url,w,h){
+        var classId = getQueryString("classId");
+        var url = url+"?classId="+classId;
+        layer_show(title,url,w,h);
+    }
+
+	/*用户-编辑*/
+    function member_edit(title,url,id,w,h){
+        var url = url+"?trainerId="+id;
+        layer_show(title,url,w,h);
+    }
+
+    $("#gradeId").change(function(){
+        searchPage();
+    });
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            var ids = id.toString().split("|");
+            var list = new Array();
+            if(ids != null && ids.length>0){
+                for(var i=0;i<ids.length;i++){
+                    list.push(parseInt(ids[i]));
+                }
+            }
+            var classId = getQueryString("classId");
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/trainClass/deleteClassTrainer',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    classId:classId,
+                    trainerIds:list
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.result);
+                },
+            });
+        });
+    }
+    //批量删除
+    function datadel(){
+        layer.confirm('确认要删除吗？',function(index){
+            var checks = $("input[name='playeritem']:checked");
+            if(checks.length == 0){ alert('未选中任何项！');return false;}
+            var checked = new Array();
+            checks.each(function(){
+                checked.push($(this).val());
+            });
+            var list = new Array();
+            if(checked != null && checked.length>0){
+                for(var i=0;i<checked.length;i++){
+                    list.push(parseInt(checked[i]));
+                }
+            }
+            var classId = getQueryString("classId");
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/trainClass/deleteClassTrainer',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    classId:classId,
+                    trainerIds:list
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+                        window.location.reload();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.result);
+                },
+            });
+        });
+    }
+
+    function saveReport() {
+        $("#formx1").ajaxSubmit(function(message) {
+            console.log(message);
+        });
+        return false; // 必须返回false，否则表单会自己再做一次提交操作，并且页面跳转
+    }
+
+    $("#exportAll").click(function(){
+        getAllPageData();
+        var param = {};
+        var attr = new Array();
+        attr.push("序号");
+        attr.push("真实姓名");
+        attr.push("身份证号");
+        attr.push("手机号");
+        attr.push("所教年级");
+        attr.push("工作单位");
+//        attr.push("注册状态");
+        param.attr = attr;
+        var dataList = $('#dataList').val();
+        $('#attr').val(attr);
+        $('#list').val(dataList);
+        document.formx1.submit();
+    });
+
+    $(function() {
+        searchPage();//分页查询
+        $("#playerAll").bind("click",function(){
+            $("input[name='playeritem']").prop("checked",this.checked);
+        });
+    });
+
+    function getAllPageData(){
+        var url = "/manageApi/trainer/getTrainerList";
+        var classId = getQueryString("classId");
+        var gradeId = $('#gradeId').val();
+        var pagesize = $('#totalnum').html();
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            async:false,
+            data: JSON.stringify({
+                trainClassId:classId,
+                gradeId:gradeId,
+                pagesize:pagesize
+            }),
+            dataType: "json",
+            success: function (data) {
+                var userList = data.result.list;
+                var dataList = new Array();
+                for (var i = 0;i < userList.length; i++){
+                    var itemJson = {};
+                    itemJson.序号 = (parseInt(data.result.pageSize)*(parseInt(data.result.pageNum)-1)+parseInt(i)+parseInt("1"))
+                    itemJson.真实姓名 = userList[i].name;
+                    itemJson.身份证号 = userList[i].idCard;
+                    itemJson.手机号 = userList[i].phone;
+                    itemJson.所教年级 = userList[i].gradeName;
+                    itemJson.工作单位 = userList[i].workUnit;
+//                    itemJson.注册状态 = userList[i].isRegisterStr;
+                    dataList.push(JSON.stringify(itemJson));
+                }
+                $('#dataList').val(dataList);
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        })
+    }
+
+    function getQueryString(name) {
+        var result = window.location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+
+    function searchPage(page){
+        var url = "/manageApi/trainer/getTrainerList";
+        var classId = getQueryString("classId");
+        var gradeId = $('#gradeId').val();
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify({
+                trainClassId:classId,
+                gradeId:gradeId,
+				page:page
+            }),
+            dataType: "json",
+            success: function (data) {
+                arrayPage(data.result.pages,data.result.size,page);
+                $('#trdata').empty();
+                var userList = data.result.list;
+                if(userList.length < 1){
+                    layer.msg('暂无记录!',{icon:6,time:1000});
+                }
+                for(var i in userList){
+                     var trainerId =userList[i].id;
+                     var _div = "<tr class='text-c'><td><input type='checkbox' name='playeritem' id='playeritem"+i+"' value='"+trainerId+"'/></td><td>" + (parseInt(data.result.pageSize)*(parseInt(data.result.pageNum)-1)+parseInt(i)+parseInt("1"))
+                        + "</td><td>" + userList[i].name
+                        + "</td><td>" + userList[i].idCard
+                        + "</td><td>" + userList[i].phone
+                        + "</td><td>" + userList[i].gradeName
+                        + "</td><td>" + userList[i].workUnit
+//                        + "</td><td>" + userList[i].isRegisterStr
+                        + "</td><td class=\"td-manage\"><i class=\"Hui-iconfont\"> <a title=\"删除\" href=\"javascript:;\" onclick=\"member_del(this,"+trainerId+")\" class=\"ml-5\" style=\"text-decoration:none\"><svg class=\"Hui-iconfont icon\" aria-hidden=\"true\"><use xlink:href=\"#Hui-iconfont-del2\"></use></svg></a></td></tr>";
+                    $('#trdata').append(_div);
+                }
+                $('#totalnum').html(data.result.total);
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+    /**
+    function getGradeList(){
+        var url = "/manageApi/getGradeList";
+        $.ajax({
+            type: "get",
+            async:false,
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                var gList = data.result;
+                console.log(gList);
+                for (var j in gList){
+                    var gradeId= gList[j].id;
+                    var gradeName = gList[j].name;
+                    $('#gradeId').append("<option value='+gradeId+'>" + gradeName + "</option>");
+                }
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+	**/
+</script>
+</body>
+</html>

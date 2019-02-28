@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.TrainerMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.Trainer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="work_unit" property="workUnit" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="TINYINT" />
+    <result column="teacher_certificate_num" property="teacherCertificateNum" jdbcType="VARCHAR" />
+    <result column="mailbox" property="mailbox" jdbcType="VARCHAR" />
+    <result column="graduate_school" property="graduateSchool" jdbcType="VARCHAR" />
+    <result column="job_year" property="jobYear" jdbcType="TINYINT" />
+    <result column="week_hour" property="weekHour" jdbcType="TINYINT" />
+    <result column="is_train" property="isTrain" jdbcType="TINYINT" />
+    <result column="train_status" property="trainStatus" jdbcType="TINYINT" />
+    <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+    <result column="train_class_id" property="trainClassId" jdbcType="INTEGER" />
+    <result column="is_register" property="isRegister" jdbcType="TINYINT" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="certificate_id" property="certificateId" jdbcType="INTEGER" />
+    <result column="certificate_gain_time" property="certificateGainTime" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, id_card, phone, work_unit, gender, teacher_certificate_num, mailbox, graduate_school,
+    job_year, week_hour, is_train, train_status, grade_id, train_class_id, is_register,certificate_id,password,certificate_gain_time
+  </sql>
+  <select id="findTrainerById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from trainer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteTrainerById" parameterType="java.lang.Integer" >
+    delete from trainer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertTrainer" parameterType="com.campus.dao.pojo.Trainer" >
+    insert into trainer (id, image,name, id_card,
+      phone, work_unit, gender, 
+      teacher_certificate_num, mailbox, graduate_school, 
+      job_year, week_hour, is_train, 
+      train_status, grade_id, train_class_id, 
+      is_register,certificate_id,certificate_gain_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{workUnit,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, 
+      #{teacherCertificateNum,jdbcType=VARCHAR}, #{mailbox,jdbcType=VARCHAR}, #{graduateSchool,jdbcType=VARCHAR}, 
+      #{jobYear,jdbcType=TINYINT}, #{weekHour,jdbcType=TINYINT}, #{isTrain,jdbcType=TINYINT}, 
+      #{trainStatus,jdbcType=TINYINT}, #{gradeId,jdbcType=INTEGER}, #{trainClassId,jdbcType=INTEGER}, 
+      #{isRegister,jdbcType=TINYINT}, #{certificate_id,jdbcType=INTEGER}, #{certificate_gain_time,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertTrainerSelective"
+          useGeneratedKeys="true"  keyProperty="id"
+          parameterType="com.campus.dao.pojo.Trainer" >
+    insert into trainer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <!--<if test="id != null" >
+        id,
+      </if>-->
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="workUnit != null" >
+        work_unit,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="teacherCertificateNum != null" >
+        teacher_certificate_num,
+      </if>
+      <if test="mailbox != null" >
+        mailbox,
+      </if>
+      <if test="graduateSchool != null" >
+        graduate_school,
+      </if>
+      <if test="jobYear != null" >
+        job_year,
+      </if>
+      <if test="weekHour != null" >
+        week_hour,
+      </if>
+      <if test="isTrain != null" >
+        is_train,
+      </if>
+      <if test="trainStatus != null" >
+        train_status,
+      </if>
+      <if test="gradeId != null" >
+        grade_id,
+      </if>
+      <if test="trainClassId != null" >
+        train_class_id,
+      </if>
+      <if test="isRegister != null" >
+        is_register,
+      </if>
+      <if test="certificateId != null" >
+        certificate_id,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="certificateGainTime != null" >
+        certificate_gain_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnit != null" >
+        #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=TINYINT},
+      </if>
+      <if test="teacherCertificateNum != null" >
+        #{teacherCertificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="mailbox != null" >
+        #{mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateSchool != null" >
+        #{graduateSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="jobYear != null" >
+        #{jobYear,jdbcType=TINYINT},
+      </if>
+      <if test="weekHour != null" >
+        #{weekHour,jdbcType=TINYINT},
+      </if>
+      <if test="isTrain != null" >
+        #{isTrain,jdbcType=TINYINT},
+      </if>
+      <if test="trainStatus != null" >
+        #{trainStatus,jdbcType=TINYINT},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="trainClassId != null" >
+        #{trainClassId,jdbcType=INTEGER},
+      </if>
+      <if test="isRegister != null" >
+        #{isRegister,jdbcType=TINYINT},
+      </if>
+      <if test="certificateId != null" >
+        #{certificateId,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateGainTime != null" >
+        #{certificateGainTime,jdbcType=BIGINT}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateTrainerByIdSelective" parameterType="com.campus.dao.pojo.Trainer" >
+    update trainer
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnit != null" >
+        work_unit = #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=TINYINT},
+      </if>
+      <if test="teacherCertificateNum != null" >
+        teacher_certificate_num = #{teacherCertificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="mailbox != null" >
+        mailbox = #{mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateSchool != null" >
+        graduate_school = #{graduateSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="jobYear != null" >
+        job_year = #{jobYear,jdbcType=TINYINT},
+      </if>
+      <if test="weekHour != null" >
+        week_hour = #{weekHour,jdbcType=TINYINT},
+      </if>
+      <if test="isTrain != null" >
+        is_train = #{isTrain,jdbcType=TINYINT},
+      </if>
+      <if test="trainStatus != null" >
+        train_status = #{trainStatus,jdbcType=TINYINT},
+      </if>
+      <if test="gradeId != null" >
+        grade_id = #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="trainClassId != null" >
+        train_class_id = #{trainClassId,jdbcType=INTEGER},
+      </if>
+      <if test="isRegister != null" >
+        is_register = #{isRegister,jdbcType=TINYINT},
+      </if>
+      <if test="certificateId != null" >
+        certificate_id = #{certificateId,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateGainTime != null" >
+        certificate_gain_time = #{certificateGainTime,jdbcType=BIGINT}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateTrainerById" parameterType="com.campus.dao.pojo.Trainer" >
+    update trainer
+    set name = #{name,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      work_unit = #{workUnit,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=TINYINT},
+      teacher_certificate_num = #{teacherCertificateNum,jdbcType=VARCHAR},
+      mailbox = #{mailbox,jdbcType=VARCHAR},
+      graduate_school = #{graduateSchool,jdbcType=VARCHAR},
+      job_year = #{jobYear,jdbcType=TINYINT},
+      week_hour = #{weekHour,jdbcType=TINYINT},
+      is_train = #{isTrain,jdbcType=TINYINT},
+      train_status = #{trainStatus,jdbcType=TINYINT},
+      grade_id = #{gradeId,jdbcType=INTEGER},
+      train_class_id = #{trainClassId,jdbcType=INTEGER},
+      is_register = #{isRegister,jdbcType=TINYINT},
+      certificate_id = #{certificateId,jdbcType=INTEGER},
+       password = #{password,jdbcType=VARCHAR},
+      certificate_gain_time = #{certificateGainTime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findTrainerListByParams" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from trainer
+    <where>
+      1=1
+      <if test="classId != null">
+        and train_class_id = #{classId}
+      </if>
+      <if test="keyword != null and keyword.length()>0">
+        and (name like CONCAT(CONCAT('%', #{keyword}), '%')  or phone like CONCAT(CONCAT('%', #{keyword}), '%') or id_card like CONCAT(CONCAT('%', #{keyword}), '%'))
+      </if>
+      <if test="gradeId != null">
+        and grade_id = #{gradeId}
+      </if>
+      <if test="isTrain != null">
+        and is_train = #{isTrain}
+      </if>
+      <if test="trainStatus != null">
+        and train_status = #{trainStatus}
+      </if>
+    </where>
+  </select>
+  <select id="findTrainerByIdCard" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from trainer
+    where id_card = #{idCard,jdbcType=INTEGER}
+  </select>
+  <select id="findTrainerListByClassId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from trainer
+    where train_class_id = #{classId,jdbcType=INTEGER}
+  </select>
+</mapper>

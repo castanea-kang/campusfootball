@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.campus.mybatis.mapper.TrainClassMapper" >
+  <resultMap id="BaseResultMap" type="com.campus.dao.pojo.TrainClass" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="BIGINT" />
+    <result column="end_time" property="endTime" jdbcType="BIGINT" />
+    <result column="p_num" property="pNum" jdbcType="INTEGER" />
+    <result column="master_name" property="masterName" jdbcType="VARCHAR" />
+    <result column="trainer_id" property="trainerId" jdbcType="INTEGER" />
+    <result column="exam_time" property="examTime" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.campus.dao.pojo.TrainClass" extends="BaseResultMap" >
+    <result column="introduction" property="introduction" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, start_time, end_time, p_num, master_name, trainer_id, exam_time, status
+  </sql>
+  <sql id="Blob_Column_List" >
+    introduction
+  </sql>
+  <select id="findTrainClassById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from train_class
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!--通过参训者Id 查询所在班级信息-->
+  <select id="findTrainClassByTrainerId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT
+       <include refid="Base_Column_List" />
+    from train_class where id = (select class_id from class_trainer_rel WHERE trainer_id = #{trainerId})
+  </select>
+  <delete id="deleteTrainClassById" parameterType="java.lang.Integer" >
+    delete from train_class
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertTrainClass" parameterType="com.campus.dao.pojo.TrainClass" >
+    insert into train_class (id, name, start_time, 
+      end_time, p_num, master_name, 
+      trainer_id, exam_time, status, 
+      introduction)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{startTime,jdbcType=BIGINT}, 
+      #{endTime,jdbcType=BIGINT}, #{pNum,jdbcType=INTEGER}, #{masterName,jdbcType=VARCHAR}, 
+      #{trainerId,jdbcType=INTEGER}, #{examTime,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, 
+      #{introduction,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertTrainClassSelective" parameterType="com.campus.dao.pojo.TrainClass" >
+    insert into train_class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="pNum != null" >
+        p_num,
+      </if>
+      <if test="masterName != null" >
+        master_name,
+      </if>
+      <if test="trainerId != null" >
+        trainer_id,
+      </if>
+      <if test="examTime != null" >
+        exam_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="pNum != null" >
+        #{pNum,jdbcType=INTEGER},
+      </if>
+      <if test="masterName != null" >
+        #{masterName,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerId != null" >
+        #{trainerId,jdbcType=INTEGER},
+      </if>
+      <if test="examTime != null" >
+        #{examTime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateTrainClassByIdSelective" parameterType="com.campus.dao.pojo.TrainClass" keyProperty="id" useGeneratedKeys="true" >
+    update train_class
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="pNum != null" >
+        p_num = #{pNum,jdbcType=INTEGER},
+      </if>
+      <if test="masterName != null" >
+        master_name = #{masterName,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerId != null" >
+        trainer_id = #{trainerId,jdbcType=INTEGER},
+      </if>
+      <if test="examTime != null" >
+        exam_time = #{examTime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateTrainClassById" parameterType="com.campus.dao.pojo.TrainClass" >
+    update train_class
+    set name = #{name,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=BIGINT},
+      end_time = #{endTime,jdbcType=BIGINT},
+      p_num = #{pNum,jdbcType=INTEGER},
+      master_name = #{masterName,jdbcType=VARCHAR},
+      trainer_id = #{trainerId,jdbcType=INTEGER},
+      exam_time = #{examTime,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findTrainClassByParam" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from train_class
+    <where>
+      1=1
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="startTime != null">
+        and start_time <![CDATA[ >= ]]> #{startTime}
+      </if>
+      <if test="endTime != null">
+        and end_time <![CDATA[ <= ]]> #{endTime}
+      </if>
+      <if test="enroll">
+        and status <![CDATA[ > ]]> 0
+      </if>
+    </where>
+    order by start_time DESC
+  </select>
+  <select id="findTrainClassByNameAndMaster" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from train_class
+    where name = #{name,jdbcType=VARCHAR} and master_name = #{masterName,jdbcType=VARCHAR}
+  </select>
+</mapper>

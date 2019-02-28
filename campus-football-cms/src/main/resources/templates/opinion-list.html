@@ -1,0 +1,258 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<style type="text/css">
+		.icon {
+			width: 1.2em; height: 1.2em;
+			vertical-align: -0.15em;
+			fill: currentColor;
+			overflow: hidden;
+		}
+	</style>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+	<script type="text/javascript" src="/static/lib/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="/static/lib/Hui-iconfont/1.0.9/iconfont.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.9/demo.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+	<!--[if IE 6]>
+	<script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+	<title>意见反馈</title>
+</head>
+<body>
+<nav class="breadcrumb"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-home"></use></svg> 首页 <span class="c-gray en">&gt;</span> 意见反馈 <span class="c-gray en">&gt;</span> 反馈列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-huanyipi"></use></svg></a></nav>
+<div class="page-container">
+	<div class="text-c">
+		<input type="text" class="input-text" maxlength="20" style="width:200px" placeholder="姓名/手机号关键字搜索" id="keyword" name=""/>
+		<label style="margin-left: 100px">反馈时间：</label>
+		<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemin" class="input-text Wdate" style="width:180px;" placeholder="开始时间">
+		-
+		<input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}'})" id="datemax" class="input-text Wdate" style="width:180px;" placeholder="结束时间">
+		<button type="submit" value="搜索" class="btn btn-success radius" onclick="searchPage()"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-search1"></use></svg> 搜索</button>
+		<button type="reset" value="重置" class="btn btn-success radius" onclick="formReset()"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-xiangpicha"></use></svg> 重置</button>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><svg class="Hui-iconfont icon" aria-hidden="true"><use xlink:href="#Hui-iconfont-del2"></use></svg> 批量删除</a></span><span class="r" >共有数据：<strong id="totalnum">0</strong> 条</span> </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<thead>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="playerAll" id="playerAll" value=""></th>
+				<th width="50">序号</th>
+				<th width="70">反馈用户</th>
+				<th width="70">手机号</th>
+				<th width="100">反馈时间</th>
+				<th width="120">反馈内容</th>
+				<th width="50">操作</th>
+			</tr>
+			</thead>
+			<tbody id="trdata">
+			</tbody>
+		</table>
+	</div>
+	<div id="jpager"></div><!-- 渲染 -->
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/lib/laypage/1.2/laypage.js"></script>
+<!-- 引入kkpager -->
+<script type="text/javascript" src="/static/kkpager/jpager.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/kkpager/jpager.css"/>
+<script type="text/javascript" src="/static/commonjs/listpage.js"></script>
+<script type="text/javascript">
+	/*用户-添加*/
+    function member_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+
+	/*用户-编辑*/
+    function member_edit(title,url,id,w,h){
+        var url = url+"?trainerId="+id;
+        layer_show(title,url,w,h);
+    }
+
+	/*删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            var ids = id.toString().split("|");
+            var list = new Array();
+            if(ids != null && ids.length>0){
+                for(var i=0;i<ids.length;i++){
+                    list.push(parseInt(ids[i]));
+                }
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/opinion/deleteOpinion',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    ids:list
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    //批量删除
+    function datadel(){
+        layer.confirm('确认要删除吗？',function(index){
+            var checks = $("input[name='playeritem']:checked");
+            if(checks.length == 0){ alert('未选中任何项！');return false;}
+            var checked = new Array();
+            checks.each(function(){
+                checked.push($(this).val());
+            });
+            var list = new Array();
+            if(checked != null && checked.length>0){
+                for(var i=0;i<checked.length;i++){
+                    list.push(parseInt(checked[i]));
+                }
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/manageApi/opinion/deleteOpinion',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    ids:list
+                }),
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+//                    $(obj).parents("tr").remove();
+                        window.location.reload();
+                        layer.msg('已删除!',{icon:1,time:3000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    //回车响应搜索
+    document.onkeydown=function(event){
+        e = event ? event :(window.event ? window.event : null);
+        if(e.keyCode==13){
+            searchPage();
+        }
+    }
+    function formReset(){
+        $('#keyword').val("");
+        $('#datemin').val("");
+        $('#datemax').val("");
+        searchPage();
+    }
+	/*个人信息*/
+    function myselfinfo(id){
+        var url = "/manageApi/opinion/getOpinion";
+        $.ajax({
+            type: "post",
+            url: url,
+            async:false,
+            contentType: "application/json",
+            data: JSON.stringify({
+                id:id
+            }),
+            dataType: "json",
+            success: function (data) {
+                var name = data.result.trainerName;
+                var phone = data.result.phone;
+                var pubdate = data.result.pubdateStr;
+                var content = data.result.content;
+                layer.open({
+                    type: 1,
+                    area: ['400px','300px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    shade:0.4,
+                    title: '反馈详情',
+                    content: '<div><br><span style="margin-left: 40px">反馈用户：</span><label>'+name+'</label><span style="margin-left: 30px">手机号：</span><label>'+phone+'</label><br><br><span style="margin-left: 40px">反馈时间：</span><label>'+pubdate+'</label><br><br><span style="margin-left: 40px">反馈内容：</span><br><div style="margin-left:40px;background: gainsboro;width:320px"><label>'+content+'</label></div></div>'
+                });
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+
+    $(function() {
+        searchPage();//分页查询
+        $("#playerAll").bind("click",function(){
+            $("input[name='playeritem']").prop("checked",this.checked);
+        });
+    });
+
+    function searchPage(){
+        var url = "/manageApi/opinion/getOpinionList";
+        var keyword = $('#keyword').val();
+        var startTime = $('#datemin').val();
+        var endTime = $('#datemax').val();
+        var sdate = new Date(startTime);
+        var edate = new Date(endTime);
+        startTime = sdate.getTime();
+        endTime = edate.getTime();
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify({
+                keyword:keyword,
+                startTime:startTime,
+                endTime:endTime
+            }),
+            dataType: "json",
+            success: function (data) {
+                $('#trdata').empty();
+                var userList = data.result;
+                if(userList.length < 1){
+                    layer.msg('暂无记录!',{icon:6,time:1000});
+                }
+                for(var i in userList){
+                     var opinion_id =userList[i].id;
+                     var _div = "<tr class='text-c'><td><input type='checkbox' name='playeritem' id='playeritem"+i+"' value='"+opinion_id+"'/></td><td>" + (parseInt(i)+1)
+                        + "</td><td>" + userList[i].trainerName
+                        + "</td><td>" + userList[i].phone
+                        + "</td><td>" + userList[i].pubdateStr
+                        + "</td><td title=\"查看详情\" href=\"javascript:;\" onClick=\"myselfinfo("+opinion_id+")\" class=\"ml-5\" style=\"cursor:pointer\">" + userList[i].content
+                        + "</td><td class=\"td-manage\"><a title=\"删除\" href=\"javascript:;\" onclick=\"member_del(this,"+opinion_id+")\" class=\"ml-5\" style=\"text-decoration:none\"><svg class=\"Hui-iconfont icon\" aria-hidden=\"true\"><use xlink:href=\"#Hui-iconfont-del2\"></use></svg></a></td></tr>";
+                    $('#trdata').append(_div);
+                }
+                $('#totalnum').html(userList.length);
+            },
+            error: function(data) {
+                console.log(data);
+                alert("异常");
+            }
+        });
+    }
+</script>
+</body>
+</html>

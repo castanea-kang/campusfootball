@@ -1,0 +1,27 @@
+<html>
+<head>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>上传图片</title>
+</head>
+<body>
+    <form action="http://localhost:9090/img/upload2" method="POST" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>用户ID</td>
+                <td><input type="text" name="playerId">
+                </td>
+            </tr>
+            <tr>
+                <td>图片:</td>
+                <td><input type="file" name="file"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="上传" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>

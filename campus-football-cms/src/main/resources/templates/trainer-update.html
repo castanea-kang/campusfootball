@@ -1,0 +1,337 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="favicon.ico" />
+<link rel="Shortcut Icon" href="favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+<script type="text/javascript" src="/static/lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>编辑用户信息</title>
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl" style="margin-left: 80px">
+			<span class="c-red">*</span>真实姓名：<input type="text" class="input-text" maxlength="20" value="" style="width:200px" placeholder="" id="username" name="username"/>
+			<label style="margin-left: 40px">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label><input type="text" class="input-text" value="" style="width:200px" placeholder="" id="mailbox" name="mailbox"/>
+		</div>
+		<div class="row cl" style="margin-left: 80px">
+			<span class="c-red">*</span>身份证号：<input type="text" class="input-text" minlength="8" maxlength="18" value="" style="width:200px" placeholder="" id="idCard" name="idCard"/>
+			<label style="margin-left: 40px">毕业院校：</label><input type="text" class="input-text" value="" style="width:200px" placeholder="" id="graduate" name="graduate"/>
+		</div>
+		<div class="row cl" style="margin-left: 80px">
+			&nbsp;工作单位：<input type="text" class="input-text" value="" style="width:200px" placeholder="" id="workUnit" name="workUnit"/>
+			<label style="margin-left: 40px">从业时间：</label>
+			<input type="number" class="input-text" value="" style="width:200px" placeholder="" id="jobYear" name="jobYear"/>
+			<!--<select class="select" id="jobYear" style="width:200px;height: 30px">-->
+				<!--<option value="" onclick="">请选择</option>-->
+				<!--<option value="1">1</option>-->
+				<!--<option value="2">2</option>-->
+				<!--<option value="3">3</option>-->
+				<!--<option value="4">4</option>-->
+				<!--<option value="5">5</option>-->
+				<!--<option value="6">6</option>-->
+				<!--<option value="7">7</option>-->
+				<!--<option value="8">8</option>-->
+				<!--<option value="9">9</option>-->
+				<!--<option value="10">10</option>-->
+			<!--</select>-->
+		</div>
+		<div class="row cl" style="margin-left: 80px">
+			&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
+			<select class="select" id="gender" style="width:200px;height: 30px">
+				<option value="1" onclick="">男</option>
+				<option value="2">女</option>
+			</select>
+			<label style="margin-left: 40px">所教年级：</label>
+			<select class="select" id="grade" style="width:200px;height: 30px">
+				<option value="" onclick="">请选择</option>
+				<option value="1">幼儿园</option>
+				<option value="2">小学</option>
+				<option value="3">初中</option>
+				<option value="4">高中</option>
+			</select>
+		</div>
+		<div class="row cl" style="margin-left: 80px">
+			<span class="c-red">*</span>教师证号：<input type="text" class="input-text" maxlength="17" value="" style="width:200px" placeholder="" id="teachNum" name="teachNum"/>
+			<label style="margin-left: 40px">本学期每周教学学时：</label>
+			<select class="select" id="weekHour" style="width:130px;height: 30px">
+				<option value="" onclick="">请选择</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">更多</option>
+			</select>
+		</div>
+		<div class="row cl" style="margin-left: 80px">
+			<span class="c-red">*</span>手机号码：<input type="text" class="input-text" maxlength="11" value="" style="width:200px" placeholder="" id="phone" name="phone"/>
+			<label style="margin-left: 40px">培训状态：</label>
+			<select class="select" id="status" style="width:200px;height: 30px">
+				<option value="1">未参加</option>
+				<option value="2">已报名</option>
+				<option value="3">培训中</option>
+				<option value="4">考试结束</option>
+				<option value="5">获得证书</option>
+			</select>
+		</div>
+		<div class="row cl" id="cert" style="margin-left: 360px;display: none">
+			<label style="margin-left: 40px">选择证书：</label>
+			<select class="select" id="certificateId" style="width:200px;height: 30px">
+			</select>
+		</div>
+		<div class="row cl" style="margin-left: 80px">
+			密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：<input type="password" class="input-text" value="" style="width:200px" placeholder="" id="password" name="000000"/>
+			<label style="margin-left: 40px">所在班级：</label>
+			<select class="select" id="trainClassId" style="width:200px;height: 30px">
+				<option value="" onclick="">暂无</option>
+			</select>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" onclick="" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
+				<button onClick="layer_close();" style="margin-left: 20px" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+    getClassList();
+    getCertificateList();
+    getTrainer();
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$("#form-member-add").validate({
+		rules:{
+			username:{
+				required:true
+			},
+			gender:{
+				required:true,
+			},
+			phone:{
+				required:true,
+				isMobile:true,
+			},
+			idCard:{
+				required:true,
+                isIdCardNo:true,
+			},
+            teachNum:{
+				required:true
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+//			$(form).ajaxSubmit();
+            updateTrainer();
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.$('.btn-refresh').click();
+			parent.layer.close(index);
+		}
+	});
+});
+
+function updateTrainer(){
+    var url = "/manageApi/trainer/editTrainer";
+    var trainerId = getQueryString("trainerId");
+    var trainerName = $('#username').val();
+    var mailbox = $('#mailbox').val();
+    var idCard = $('#idCard').val();
+    var graduateSchool = $('#graduate').val();
+    var workUnit = $('#workUnit').val();
+    var jobYear = $('#jobYear').val();
+    var gender = $('#gender').val();
+    var gradeId = $('#grade').val();
+    var teacherCertificateNum = $('#teachNum').val();
+    var weekHour = $('#weekHour').val();
+    var phone = $('#phone').val();
+    var status = $('#status').val();
+    var trainClassId = $('#trainClassId').val();
+    var certificateId = $('#certificateId').val();
+    var password = $('#password').val();
+    $.ajax({
+        type: "post",
+        url: url,
+        contentType: "application/json",
+        async:false,
+        data: JSON.stringify({
+            trainerId:trainerId,
+            trainerName:trainerName,
+            mailbox:mailbox,
+            idCard:idCard,
+            graduateSchool:graduateSchool,
+            workUnit:workUnit,
+            jobYear:jobYear,
+            gender:gender,
+            gradeId:gradeId,
+            teacherCertificateNum:teacherCertificateNum,
+            weekHour:weekHour,
+            phone:phone,
+            trainStatus:status,
+            trainClassId:trainClassId,
+            password:password,
+            certificateId:certificateId
+        }),
+        dataType: "json",
+        success: function (data) {
+            var ret = data.success;
+            if(ret){
+                alert(data.result);
+                parent.window.location.reload();
+            }else{
+                alert(data.result);
+			}
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    })
+}
+
+function getTrainer(){
+    var url = "/manageApi/trainer/getTrainer";
+    var trainerId = getQueryString("trainerId");
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: url,
+        data: JSON.stringify({
+            trainerId:trainerId
+        }),
+        dataType: "json",
+        success: function (data) {
+            var trainClassId = data.result.trainClassId;
+            console.log(trainClassId);
+            $('#trainClassId').val(trainClassId);
+            var trainStatus = data.result.trainStatus;
+            console.log(trainStatus);
+            $('#status').val(trainStatus);
+            if(trainStatus > 3){
+                $('#cert').attr("style","margin-left: 360px");
+                var certify = data.result.certificateId
+                $('#certificateId').val(certify);
+            }
+            $('#username').val(data.result.name);
+            $('#mailbox').val(data.result.mailbox);
+            $('#idCard').val(data.result.idCard);
+            $('#graduate').val(data.result.graduateSchool);
+            $('#workUnit').val(data.result.workUnit);
+            $('#jobYear').val(data.result.jobYear);
+            $('#gender').val(data.result.gender);
+            $('#grade').val(data.result.gradeId);
+            $('#teachNum').val(data.result.teacherCertificateNum);
+            $('#weekHour').val(data.result.weekHour);
+            $('#phone').val(data.result.phone);
+            $('#password').val("000000");
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    });
+}
+
+function getQueryString(name) {
+    var result = window.location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    if (result == null || result.length < 1) {
+        return "";
+    }
+    return result[1];
+}
+
+function getClassList(){
+    var url = "/manageApi/trainClass/getTrainClassList";
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        async:false,
+        url: url,
+        data: JSON.stringify({
+            status:null,
+            startTime:null,
+            endTime:null,
+			enroll:true
+        }),
+        dataType: "json",
+        success: function (data) {
+            var gList = data.result;
+            for (var j=gList.length-1;j>=0;j--){
+                var classId= gList[j].id;
+                var className = gList[j].name;
+                var _div = "<option value='"+classId+"'>" + className + "</option>";
+                $('#trainClassId').append(_div);
+            }
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    });
+}
+
+function getCertificateList(){
+    var url = "/manageApi/getCertificateList";
+    $.ajax({
+        type: "get",
+        async:false,
+        url: url,
+        dataType: "json",
+        success: function (data) {
+            var gList = data.result;
+            $('#certificateId').append("<option value='' onclick=''>选择证书</option>");
+            for (var j in gList){
+                var cid= gList[j].id;
+                var cName = gList[j].name;
+                $('#certificateId').append("<option value='"+cid+"'>" + cName + "</option>");
+            }
+        },
+        error: function(data) {
+            console.log(data);
+            alert("异常");
+        }
+    });
+}
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
